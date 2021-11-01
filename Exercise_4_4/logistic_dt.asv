@@ -1,0 +1,35 @@
+%Adjust the logistic equation and initial conditions
+f = @(u, t) 0.1*(1 - u/500)*u;
+U_0 = 100;  
+dt = [0.5, 0.5 /2]; 
+T = 60;
+i = 1;
+
+cont = 1;
+while cont == 1
+    [u1, t] = ode_FE(f, U_0, dt(1), T);
+    [u2, t] = ode_FE(f, U_0, dt(2), T);
+    figure
+    plot(t, u1, t, u2, '--');
+    xlabel('t');  ylabel('N(t)');
+    
+    dt1 = string(dt(1));
+    dt2 = string(dt(2));
+    legend({'dt = ' + dt1, 'dt = ' + dt2}, 'Location 
+    dt(1) = dt(2);
+    dt(2) = dt(1) / 2;
+end
+
+filestem = strcat('tmp_',num2str(dt));
+% Note: this print statement gets a problem with the decimal point
+%print(filestem,'-dpng');  print(filestem,'-dpdf');  
+% so we rather do it like this:
+filename = strcat(filestem, '.png'); print(filename);
+filename = strcat(filestem, '.pdf'); print(filename);
+
+dt = 20;  T = 100;
+[u, t] = ode_FE(f, U_0, dt, T);
+plot(t, u, 'b-');
+xlabel('t');  ylabel('N(t)');
+filestem = strcat('tmp_',num2str(dt));
+print(filestem, '-dpng');  print(filestem, '-dpdf');
